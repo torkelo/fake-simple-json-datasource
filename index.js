@@ -2,6 +2,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('lodash');
 var app = express();
+var appInsights = require('applicationinsights');
+
+require('dotenv').config();
+appInsights.setup(process.env.APP_INSIGHTS_API_KEY).start();
 
 app.use(bodyParser.json());
 
@@ -49,11 +53,11 @@ var table =
       [ 1234567, 'US', 321 ],
     ]
   };
-  
+
 function setCORSHeaders(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST");
-  res.setHeader("Access-Control-Allow-Headers", "accept, content-type");  
+  res.setHeader("Access-Control-Allow-Headers", "accept, content-type");
 }
 
 
@@ -73,6 +77,10 @@ app.all('/', function(req, res) {
 });
 
 app.all('/search', function(req, res){
+  console.log(req.url);
+  console.log(req.headers);
+  console.log(req.body);
+
   setCORSHeaders(res);
   var result = [];
   _.each(timeserie, function(ts) {
